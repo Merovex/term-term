@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+		<nav class="light-blue lighten-1" role="navigation">
+		    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">TermTerm</a>
+		      <ul class="right hide-on-med-and-down">
+		        <li><a href="#">Navbar Link</a></li>
+		      </ul>
+
+		      <ul id="nav-mobile" class="side-nav">
+		      </ul>
+		      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+		    </div>
+		  </nav>
+
+		 <div class='container z-depth-2'>
+		 <div class='container'>
+		   <div class='row'>
+		     <div class='s12'>
+		       <h1>TermTerm Generator</h1>
+			   {{ content }}
+			   </div>
+		   </div>
+		 </div>
+		 </div>
+
+      <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+      <script>
+		function commaed(x) {
+		    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		var dictionary = {}
+		var nouns = [];
+		var adjs = [];
+		function shuffle (array) {
+		  var i = 0
+		    , j = 0
+		    , temp = null
+
+		  for (i = array.length - 1; i > 0; i -= 1) {
+		    j = Math.floor(Math.random() * (i + 1))
+		    temp = array[i]
+		    array[i] = array[j]
+		    array[j] = temp
+		  }
+		  return array;
+		}
+		function pize(d) {
+			return "<p>" + d.split("\n\n").join("</p><p>") + "</p>"
+		}
+		function definition(id) {
+		  $('.definition').hide();
+		  $(id).show();
+		}
+		function makeList() {
+			var list = ""
+			$('.tooltipped').tooltip({delay: 50, tooltip:"new",position:"right"});
+			definitions = "";
+			for (i=0; i<13; i++ ){
+				noun = nouns.shift()
+				adjective = adjs.shift()
+				list = list + "<li><a onclick=\"definition('#defn-"+i+"')\" href='#'>" + adjective["term"] +" "+ noun["term"] +"</a></li>"
+				definitions = definitions + "<div class='definition' id='defn-"+i+"'><div><b>"+adjective["term"]+"</b><p>"+pize(adjective['defn'])+"</p></div>"
+				definitions = definitions + "<div><b>"+noun["term"] +"</b><p>"+pize(noun['defn'])+"</p></div></div>"
+			}
+			$('#term-term').html(list)
+			$('#definitions').html(definitions)
+			$('#r').html(commaed(adjs.length))
+			$('.definition').hide();
+		}
+		$.getJSON('/dictionary.json').done(function(data) {
+			$('#nLen').html(commaed(data['nouns'].length))
+			$('#aLen').html(commaed(data['adjs'].length))
+	        nouns = shuffle(data['nouns']);
+	        adjs  = shuffle(data['adjs']);
+	        makeList();
+	    });
+	    $('#generate').click(function(){ makeList(); })
+      </script>
+    </body>
+  </html>
