@@ -84,6 +84,8 @@
 		$.getJSON('/dictionary.json').done(function(data) {
 			$('#nLen').html(commaed(data['nouns'].length))
 			$('#aLen').html(commaed(data['adjs'].length))
+			
+		$('#tLen').html(commaed(data['nouns'].length * data['adjs'].length))
 	        nouns = shuffle(data['nouns']);
 	        adjs  = shuffle(data['adjs']);
 	        makeList();

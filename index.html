@@ -4,10 +4,11 @@ layout: default
 
 <p>The <b>Term-Term</b> dictionary used to create this list comprises 
 <span id='aLen'>?????</span> adjectives and
-<span id='nLen'>?????</span> nouns.
+<span id='nLen'>?????</span> nouns; 
+<span id='tLen'>?????</span> possible permutations.
 
 On page load, it shuffles both set of adjectives and nouns (deck of terms) using Fisher-Yates Shuffle methodology.
-Each list generation action takes the next set of terms off the top of the term deck.
+Each list generation action takes the next set of terms off the top of the term deck, ensuring no term is repeated until the next page load.
 </p>
 
 <button class='btn' id='generate'>Generate</button>
